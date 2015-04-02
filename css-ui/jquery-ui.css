@@ -104,6 +104,13 @@
 #index {
   width:100%;
 }
+#main {
+ width:100%;
+ top:20px;
+ left:20px;
+ position:relative;
+}
+
 #container{
   float:left;
   position:relative;
@@ -236,3 +243,5 @@ top:15
 .highlight{
 background-color: yellow;
 }
+
+

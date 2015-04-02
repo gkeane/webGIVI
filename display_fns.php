@@ -12,6 +12,7 @@ function display_header(){
   <script>
     $(function() {
       $( "#menu" ).menu();
+      $( "#tabs" ).tabs();
       //    $body = $("body");
       //
       //$(document).on({
@@ -36,7 +37,7 @@ function display_header(){
 <div id="menu">
   <div><a href="index.php">Home</a></div>
   <div><a href="http://biotm.cis.udel.edu/eGIFT/">eGIFT</a></div>
-  <div><a href="webGIVI_Tutorial.pdf" target='_blank'>Tutorial</a></div>
+  <div><a href="tutorial.php">Tutorial</a></div>
   <div><a href="contact.php">Contact</a></div>
 </div>
 

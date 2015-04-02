@@ -1,23 +1,21 @@
-var SORTOUTERFLAG="OuterLength";
-var SORTINNERFLAG="Default";
-var UpExpressed="Up expressed";
-var DownExpressed="Down expressed";
-var concept_name = 'Pineal';
-var concept_name ='';
+var SORTOUTERFLAG = "OuterLength";
+var SORTINNERFLAG = "Default";
+var UpExpressed = "Up expressed";
+var DownExpressed = "Down expressed";
+//window.conceptFile_name = 'Pineal';
+//window.conceptFile_name ='';
 
-function loadData(data,flag_egift) {
-    console.log(data);
+function loadData(data, flag_egift) {
+    //console.log(data);
+    //
     outer = data.outer;
-    if(SORTOUTERFLAG==="OuterLength")
-    {
+    if (SORTOUTERFLAG === "OuterLength") {
         sortOuterByNameLength(data.outer);
     }
-    else  if(SORTOUTERFLAG === "OuterFrequency")
-    {
+    else if (SORTOUTERFLAG === "OuterFrequency") {
         sortOuterByNodesFrequency(data.outer);
     }
-    else  if(SORTOUTERFLAG === "OuterRateLimited")
-    {
+    else if (SORTOUTERFLAG === "OuterRateLimited") {
         sortOuterByNodesRateLimited(data.outer);
     }
     function compare(a, b) {
@@ -27,7 +25,7 @@ function loadData(data,flag_egift) {
             return 1;
         return 0;
     }
-    function sortDefault(inner){
+    function sortDefault(inner) {
         inner = inner.sort(compare);
         var inner_even = [];
         var inner_odd = [];
@@ -38,24 +36,20 @@ function loadData(data,flag_egift) {
                 inner_even.push(inner[i]);
             }
         }
-        inner_odd= inner_odd.reverse();
+        inner_odd = inner_odd.reverse();
         return inner = inner_odd.concat(inner_even);
     }
 
-    if(SORTINNERFLAG==="Default")
-    {
-        data.inner=sortDefault(data.inner);
+    if (SORTINNERFLAG === "Default") {
+        data.inner = sortDefault(data.inner);
     }
-    else if(SORTINNERFLAG==="InnerLength")
-    {
+    else if (SORTINNERFLAG === "InnerLength") {
         sortInnerByNameLength(data.inner);
     }
-    else if(SORTINNERFLAG === "InnerFrequency")
-    {
+    else if (SORTINNERFLAG === "InnerFrequency") {
         sortInnerByNodesFrequency(data.inner);
     }
-    else if(SORTINNERFLAG === "InnerRateLimited")
-    {
+    else if (SORTINNERFLAG === "InnerRateLimited") {
         sortInnerByNodesRateLimited(data.inner);
     }
 
@@ -73,6 +67,7 @@ function loadData(data,flag_egift) {
             }
         } while (swapped)
     }
+
     function sortOuterByNodesFrequency(outer) {
         var swapped;
         do {
@@ -87,6 +82,7 @@ function loadData(data,flag_egift) {
             }
         } while (swapped)
     }
+
     function sortOuterByNodesRateLimited(outer) {
 
         for (var i = 0; i < outer.length; ++i) {
@@ -96,6 +92,7 @@ function loadData(data,flag_egift) {
                 }
         }
     }
+
     function sortInnerByNameLength(inner) {
         var swapped;
         do {
@@ -110,6 +107,7 @@ function loadData(data,flag_egift) {
             }
         } while (swapped)
     }
+
     function sortInnerByNodesFrequency(inner) {
         var swapped;
         do {
@@ -124,6 +122,7 @@ function loadData(data,flag_egift) {
             }
         } while (swapped)
     }
+
     function sortInnerByNodesRateLimited(inner) {
 
         for (var i = 0; i < inner.length; ++i) {
@@ -192,10 +191,12 @@ function loadData(data,flag_egift) {
         tmp += '</div>';
         return tmp;
     }
+
 //    var ringSpacing = getStringLength(maxString);      //40chars 239
     function basicDivString(string, label) {
         var tmp = '';
-        tmp += '<div id=' + "legend_" + string + ' class="widget shadow drag" style="position: absolute; left:0px; top:400px; width: 220px; height: 160px;">';
+        tmp += '<div id=' + "legend_" + string + ' class="widget shadow drag" style="position: absolute; left:0px; ' +
+            'top:400px; width: 220px; height: 160px;">';
         tmp += '<div class="dragheader">' + label;
         tmp += '<span class="close" >X</span>';
         tmp += '</div>';
@@ -205,22 +206,27 @@ function loadData(data,flag_egift) {
         tmp += '</div>';
         return tmp;
     }
-    
+
+    if (!$('#legend_dataFile').length) {
+        adddconceptFileName();
+    }
+
     //only show legend when if it's eGIFT data
-    if(flag_egift){
+    if (flag_egift) {
         addInnerLegend();
         addOuterLegend();
     }
-
-    function addExpressionFile(string){
-        if(string==""||string==undefined)
+    //添加legend名字 添加前判断 是否已经存在，若是，就删掉，之后按需添加
+    function adddconceptFileName() {
+        //添加legend名字 添加前判断 是否已经存在，若是，就删掉，之后按需添加
+        if (window.conceptFile_name == "" || window.conceptFile_name == null)
             return;
-        if($('#legend_expressionFile').length){
-           $('#legend_expressionFile').remove();
+        if ($('#legend_expressionFile').length) {
+            $('#legend_expressionFile').remove();
         }
-        var vcdiv = $(basicString("expressionFile", "Expression File Name")).css({
+        var vcdiv = $(basicString("expressionFile", "File Name")).css({
             top: 10,
-            height: 60
+            height: 40
         });
 
         $('body').append(vcdiv);
@@ -230,12 +236,122 @@ function loadData(data,flag_egift) {
         parent.find(".close").click(function () {
             parent.remove();
         });
-        $('#legend_expressionFile').css({left: 0,top: 50, height:40});
-        var expressionFileSvg = d3.select('#divBody_expressionFile').append('svg').attr("top", 20).attr("width", 220).attr("height", 40).append("g")
-            .attr("transform", "translate(" + (20) + "," + (20) + ")").append('text').text(string);
+        $('#legend_expressionFile').css({left: 0, top: 50, height: 60});
+        var len = 220 - getStringLength("File Name") - 30;
+        if (len < 0) {
+            len = 0;
+        }
+        parent.find('.close').css({
+            left: len
+        })
+        //if(typeof string == "string")
+        //{
+        //    if (string.length > 23) {
+        //        var string = "Expression file: " + string.substr(0, 23) + "...";
+        //    }
+        //    else
+        //    {
+        //        var string = "Expression file: " + string;
+        //    }
+        //
+        //}
+        var expressionFileSvg = d3.select('#divBody_expressionFile').append('svg').attr("top", 20).attr("width", 220).attr("height", 40).append("g");
+
+        if (!(window.conceptFile_name == "")) {
+            if (window.conceptFile_name.length > 23) {
+                var conceptFile_name = "Concept name: " + window.conceptFile_name.substr(0, 23) + "...";
+            }
+            else {
+                var conceptFile_name = "Concept name: " + window.conceptFile_name;
+            }
+            expressionFileSvg
+                .append('text')
+                .attr("x", 5)
+                .attr("y", 20)
+                .text(conceptFile_name);
+            //expressionFileSvg
+            //    .append('text')
+            //    .attr("x", 5)
+            //    .attr("y", 40)
+            //    .text(string);
+        }
     }
 
-        function addInnerLegend() {
+    function addExpressionFile(string) {
+        if (string == "" || string == undefined)
+            return;
+        if ($('#legend_expressionFile').length) {
+            $('#legend_expressionFile').remove();
+        }
+        if ($('#legend_dataFile').length) {
+            $('#legend_dataFile').remove();
+        }
+        var vcdiv = $(basicString("dataFile", "File Name")).css({
+            top: 10,
+            height: 60
+        });
+
+        $('body').append(vcdiv);
+        $(".drag").draggable();
+
+        var parent = $('#legend_dataFile');
+        parent.find(".close").click(function () {
+            parent.remove();
+        });
+        $('#legend_dataFile').css({left: 0, top: 50, height: 80});
+        var len = 220 - getStringLength("File Name") - 30;
+        if (len < 0) {
+            len = 0;
+        }
+        parent.find('.close').css({
+            left: len
+        })
+        if (typeof string == "string") {
+            if (string.length > 23) {
+                if (CUSTOMEDATA) {
+                    var string = "Custom file: " + string.substr(0, 23) + "...";
+                }
+                else {
+                    var string = "Expression file: " + string.substr(0, 23) + "...";
+                }
+
+            }
+            else {
+                if (CUSTOMEDATA) {
+                    var string = "Custom file: " + string;
+                }
+                else {
+                    var string = "Expression file: " + string;
+                }
+            }
+
+        }
+        var expressionFileSvg = d3.select('#divBody_dataFile').append('svg').attr("top", 20).attr("width", 220).attr("height", 60).append("g");
+
+        if (window.conceptFile_name == '') {
+            expressionFileSvg.attr("transform", "translate(" + (5) + "," + (20) + ")").append('text').text(string);
+        }
+        else {
+            if (window.conceptFile_name.length > 23) {
+                var conceptFile_name = "Concept name: " + window.conceptFile_name.substr(0, 23) + "...";
+            }
+            else {
+                var conceptFile_name = "Concept name: " + window.conceptFile_name;
+            }
+            expressionFileSvg
+                .append('text')
+                .attr("x", 5)
+                .attr("y", 20)
+                .text(conceptFile_name);
+            expressionFileSvg
+                .append('text')
+                .attr("x", 5)
+                .attr("y", 40)
+                .text(string);
+        }
+    }
+
+    function addInnerLegend() {
         if ($('#legend_inner').length) {
             $('#legend_inner').remove();
         }
@@ -251,8 +367,8 @@ function loadData(data,flag_egift) {
         parent.find(".close").css({
             left: 110
         }).click(function () {
-            parent.remove();
-        });
+                parent.remove();
+            });
         var innerSvg = d3.select('#divBody_inner').append('svg').attr("left", 0).attr("top", 20).attr("width", 220).attr("height", 160).append('g');
         innerSvg.append('rect')
             .attr("x", 10)
@@ -337,7 +453,7 @@ function loadData(data,flag_egift) {
         innerSvg.append('text')
             .attr("x", 70)
             .attr("y", 80)
-            .text("Ratelimit+"+UpExpressed);
+            .text("Ratelimit+" + UpExpressed);
 
 
         innerSvg.append('rect')
@@ -380,7 +496,7 @@ function loadData(data,flag_egift) {
         innerSvg.append('text')
             .attr("x", 70)
             .attr("y", 120)
-            .text("Ratelimit+"+DownExpressed);
+            .text("Ratelimit+" + DownExpressed);
 
 
     }
@@ -401,8 +517,8 @@ function loadData(data,flag_egift) {
         parent.find(".close").css({
             left: 110
         }).click(function () {
-            parent.remove();
-        });
+                parent.remove();
+            });
         var innerSvg = d3.select('#divBody_outer').append('svg').attr("left", 0).attr("top", 20).attr("width", 220).attr("height", 160).append('g');
         innerSvg.append('circle')
             .attr("cx", 10)
@@ -515,7 +631,7 @@ function loadData(data,flag_egift) {
         innerSvg.append('text')
             .attr("x", 70)
             .attr("y", 80)
-            .text("Ratelimit+"+UpExpressed);
+            .text("Ratelimit+" + UpExpressed);
 
 
         innerSvg.append('circle')
@@ -572,7 +688,7 @@ function loadData(data,flag_egift) {
         innerSvg.append('text')
             .attr("x", 70)
             .attr("y", 120)
-            .text("Ratelimit+"+DownExpressed);
+            .text("Ratelimit+" + DownExpressed);
     }
 
     function getStringLength(string) {
@@ -622,11 +738,11 @@ function loadData(data,flag_egift) {
 
     var diagonal = d3.svg.diagonal()
         .source(function (d) {
-            return {"x": d.outer.y * Math.cos(projectX(d.outer.x)),
+            return {"x": d.outer.y * Math.cos(projectX(d.outer.x)),   //角度转成实际位置
                 "y": -d.outer.y * Math.sin(projectX(d.outer.x))};
         })
         .target(function (d) {
-            return {"x": d.inner.y + rect_height / 2,
+            return {"x": d.inner.y + rect_height / 2,        //实际位置
                 "y": d.outer.x > 180 ? d.inner.x : d.inner.x + rect_width};
         })
         .projection(function (d) {
@@ -637,7 +753,7 @@ function loadData(data,flag_egift) {
         return ((x - 90) / 180 * Math.PI) - (Math.PI / 2);
     }
 
-
+    //下面是缩放 navigation相关的
     var width = window.innerWidth;
     var height = window.innerHeight;
     var zoom = d3.behavior.zoom()
@@ -660,7 +776,7 @@ function loadData(data,flag_egift) {
     }//Yongnan
     d3.select("#reset").on("click", function () {
 
-        xValue =0;
+        xValue = 0;
         yValue = 0;
         zoomValue = 1;
         d3.select("#svgZoomContainer").attr("transform", "translate(" + xValue + "," + yValue + ")scale(" + zoomValue + ")");
@@ -735,7 +851,7 @@ function loadData(data,flag_egift) {
     removeObj.related_nodes = [];
     removeObj.related_links = [];
 
-//*************************links
+//*************************draw links
     var link = zoomContainer.attr('class', 'links').selectAll(".link")
         .data(data.links)
         .enter().append('path')
@@ -771,8 +887,7 @@ function loadData(data,flag_egift) {
         });
 
 
-// outer nodes
-
+//draw outer nodes
     var onode = zoomContainer.selectAll(".outer_node")
         .data(data.outer)
         .enter().append("g")
@@ -808,9 +923,8 @@ function loadData(data,flag_egift) {
                 top: d3.event.pageY - 10
             });
             d3.event.preventDefault();
-        });                                   //----------------------------------------//
-
-
+        });
+//-----------------draw circle------------------//
     onode.append("circle")
         .attr('id', function (d) {
             return d.id
@@ -837,7 +951,7 @@ function loadData(data,flag_egift) {
 //onode.append("circle")
 //    .attr('r', 20)
 //    .attr('visibility', 'hidden');
-
+     //------------draw rect---------------//
     onode.append('rect')     //Yongnan
 
         .attr('width', function (d) {
@@ -856,15 +970,24 @@ function loadData(data,flag_egift) {
             return "outRect" + d.id;
         })
         .attr('fill', function (d) {
-            if (d.regulation == undefined)
-                return "#f46d43";
-            else if (d.regulation == "Up")
-                return "#ffff00";
-            else if (d.regulation == "Down")
-                return "#00ff00";
+            if (CUSTOMEDATA) {
+                if (d.customColor === "1") {
+                    return "#ffff00";
+                }
+                else
+                    return "#f46d43";
+            }
+            else {
+                if (d.regulation == undefined)
+                    return "#f46d43";
+                else if (d.regulation == "Up")
+                    return "#ffff00";
+                else if (d.regulation == "Down")
+                    return "#00ff00";
+            }
         });
 
-
+    //------------draw text---------------//
     onode.append("text")
         .attr('id', function (d) {
             return d.id + '-txt';
@@ -876,11 +999,21 @@ function loadData(data,flag_egift) {
         .attr("transform", function (d) {
             return d.x < 180 ? "translate(8)" : "rotate(180)translate(-8)";
         })
+        .attr("fill", function (d) {
+            //if (d.searched === "1") {
+            //    return "#ff0000";
+            //}
+            //else if (d.searched === "undefined") {
+            //    return "#000000";
+            //}
+            //else
+                return "#000000";
+        })
         .text(function (d) {
             return trimLabel(d.name, 'outer');
         });
 
-// inner nodes
+// draw inner nodes
 
     var inode = zoomContainer.selectAll(".inner_node")
         .data(data.inner)
@@ -928,9 +1061,9 @@ function loadData(data,flag_egift) {
             d3.event.preventDefault();
             //-----------------------------------------------
         });
-                    //<line x1="5" y1="5" x2="40" y2="40" stroke="gray" stroke-width="5"  />
+    //<line x1="5" y1="5" x2="40" y2="40" stroke="gray" stroke-width="5"  />
 
-
+    //------------draw rect for ratelinited---------------//
     inode
         .append('rect')
         .attr('width', 10)
@@ -941,11 +1074,11 @@ function loadData(data,flag_egift) {
                 return "#00f";
             }
             else {
-                return "#ffffff";//f46d43
+                return "#666666";//f46d43
             }
         })
         .attr('pointer-events', 'all');
-
+    //------------draw rect for frequency---------------//
     inode.append('rect')
         .attr('width', function (d) {       //Yongnan
             if (maxInnerLinks == 0)
@@ -959,30 +1092,51 @@ function loadData(data,flag_egift) {
         })
         .attr('fill', function (d) {
 //            return "#f46d43"
-            if (d.regulation == undefined)
-                return "#f46d43";
-            else if (d.regulation == "Up")
-                return "#ffff00";
-            else if (d.regulation == "Down")
-                return "#00ff00";
+            if (CUSTOMEDATA) {
+                if (d.customColor === "1") {
+                    return "#ffff00";
+                }
+                else
+                    return "#f46d43";
+            }
+            else {
+                if (d.regulation == undefined)
+                    return "#f46d43";
+                else if (d.regulation == "Up")
+                    return "#ffff00";
+                else if (d.regulation == "Down")
+                    return "#00ff00";
+            }
         })
         .attr('pointer-events', 'all');
-    inode.append("line")
-        .attr("x1",10).attr("y1",0)
-        .attr("x2",10).attr("y2",rect_height)
-        .attr("stroke","gray")
-        .attr("fill","gray")
-        .attr("stroke-width","2");
-
+    //------------draw splitline between ratelimited and frequency---------------//
+    //inode.append("line")
+    //    .attr("x1", 10).attr("y1", 0)
+    //    .attr("x2", 10).attr("y2", rect_height)
+    //    .attr("stroke", "gray")
+    //    .attr("fill", "gray")
+    //    .attr("stroke-width", "2");
+    //------------draw text---------------//
     inode.append("text")
         .attr('id', function (d) {
             return d.id + '-txt';
         })
         .attr('text-anchor', 'middle')
-        .attr("transform", "translate(" + (rect_width / 2 + 10) + ", " + rect_height * .75 + ")")
+        //.attr("transform", "translate(" + (rect_width / 2 + 10) + ", " + rect_height * .75 + ")")
+        .attr("transform", "translate(" + (rect_width / 2 ) + ", " + rect_height * .75 + ")")
         .text(function (d) {
             return trimLabel(d.name, 'inner');
         })    //d.name change to two lines or only show the fixed width of string and show all when hover
+        .attr("fill", function (d) {
+            //if (d.searched === "1") {
+            //    return "#ff0000";
+            //}
+            //else if (d.searched === "undefined") {
+            //    return "#000000";
+            //}
+            //else
+                return "#000000";
+        })
         .each(function (d) {
             d.bx = this.getBBox().x;
             d.by = this.getBBox().y;
@@ -992,6 +1146,7 @@ function loadData(data,flag_egift) {
 
     d3.select(self.frameElement).style("height", diameter - 150 + "px");
 
+    //------------GUI---------------//
     var FizzyText = function () {
         this.saveData = function () {
             var data_download = '';
@@ -1034,7 +1189,7 @@ function loadData(data,flag_egift) {
                 window.gui_flag = true;
                 window._data = data;
 
-                loadData(subsetObj,flag_egift);
+                loadData(subsetObj, flag_egift);
 
             }
             else {
@@ -1045,15 +1200,20 @@ function loadData(data,flag_egift) {
         this.loadFile = function () {
             $('#myInput').click();
         };
+        this.chooseColorFile = function () {
+            $('#myInput').click();
+        };
         this.upExpressed = UpExpressed;
         this.downExpressed = DownExpressed;
 
-        this.colorNodeSample = function(){
-            window.open('sampleData/symbolRegulation.txt','_blank');
+        this.colorNodeSample = function () {
+            window.open('sampleData/symbolRegulation.txt', '_blank');
+        };
+        this.colorFileSample = function () {
+            window.open('sampleData/colorSample.txt', '_blank');
         };
         this.load = function () {
-	     if(UpExpressed==""||DownExpressed=="")
-            {
+            if (UpExpressed == "" || DownExpressed == "") {
                 alert("Please input the expressed label!");
                 return;
             }
@@ -1107,13 +1267,71 @@ function loadData(data,flag_egift) {
                         $(".tooltip").remove();
                         $(".main").remove();
 
-			   addExpressionFile(selected_file.name);
-                        loadData(data,flag_egift);
+                        addExpressionFile(selected_file.name);
+                        loadData(data, flag_egift);
                     }
                 };
             }
         };
+        this.loadColor = function () {
+            var selected_colorfile = $('#myInput').get(0).files[0];
+            if (selected_colorfile === undefined /*&& selectValue === null*/) {
+                alert("Please select data file!");
+            }
+            else if (selected_colorfile !== undefined /*&& selectValue === null*/) {
+                var reader = new FileReader();
+                reader.readAsText(selected_colorfile, "UTF-8");
+                reader.onerror = function () {
+                };
+                reader.onprogress = function (event) {
+                };
+
+                reader.onload = function () {
+                    var tempdata = "";
+                    tempdata = reader.result;
+                    if (tempdata != null) {
+                        tempdata = tempdata.replace(/\r\n/g, '\n');
+                        tempdata = tempdata.replace(/\r/g, '\n');
+                        var symbolRegulation = tempdata.split("\n");
+                        if (symbolRegulation[0].indexOf("state") == -1 || symbolRegulation.length < 2) {
+                            alert("Color file is a tab-delimited format whose first line begins with name and state.");
+                            return;
+                        }
+                        var symbolRegulations = {};
+                        symbolRegulations.symbols = [];
+                        symbolRegulations.customColor = [];
+                        for (var i = 1; i < symbolRegulation.length; ++i) {
+                            if (symbolRegulation[i] == "")
+                                continue;
+                            var tmps = symbolRegulation[i].split("\t");
+                            symbolRegulations.symbols.push(tmps[0]);
+                            symbolRegulations.customColor.push(tmps[1]);
+                        }
+                        for (var i = 0; i < data.inner.length; ++i) {
+                            var index = symbolRegulations.symbols.indexOf(data.inner[i].name);
+                            if (index > -1) {
+                                data.inner[i].customColor = symbolRegulations.customColor[index];
+                            }
+                        }
+                        for (var i = 0; i < data.outer.length; ++i) {
+                            var index = symbolRegulations.symbols.indexOf(data.outer[i].name);
+                            if (index > -1) {
+                                data.outer[i].customColor = symbolRegulations.customColor[index];
+                            }
+                        }
+                        d3.select("#svgID").remove();   //=================================================================================================================================
+                        $("#menuID").remove();
+                        $(".tooltip").remove();
+                        $(".main").remove();
+
+                        addExpressionFile(selected_colorfile.name);
+                        loadData(data, flag_egift);
+                    }
+                };
+            }
+        }
         this.switchNode = function () {
+
             var newData = [];
             for (var i = 0; i < data.outer.length; ++i) {
                 var tmpData = [];
@@ -1133,18 +1351,40 @@ function loadData(data,flag_egift) {
             $("#menuID").remove();
             $(".tooltip").remove();
             $(".main").remove();
-            SymbolInInner=!SymbolInInner;
+            SymbolInInner = !SymbolInInner;
             renderNodes(newData);
         };
         this.innerLegend = function () {
 
             addInnerLegend();
         };
+        this.inputSearchName = "";
+        this.searchNode = function () {
+            if (_this.inputSearchName === "")
+                return;
+            for (var i = 0; i < data.inner.length; ++i) {//Yongnan2015216
+                if (_this.inputSearchName === data.inner[i].name) {
+                    //data.inner[i].searched = "1";
+                    d3.select("#"+data.inner[i].id+"-txt").attr("fill","#f00");
+                }
+            }
+            for (var i = 0; i < data.outer.length; ++i) {
+                if (_this.inputSearchName === data.outer[i].name) {
+                    //data.outer[i].searched = "1";
+                    d3.select("#"+data.outer[i].id+"-txt").attr("fill","#f00");
+                }
+            }
+            //d3.select("#svgID").remove();   //=================================================================================================================================
+            //$("#menuID").remove();
+            //$(".tooltip").remove();
+            //$(".main").remove();
+            //loadData(data, flag_egift);
+        };
         this.outerLegend = function () {
 
             addOuterLegend();
         };
-        this.innersmallerLength = "5";
+        this.innersmallerLength = "200";
         this.innergreaterLength = "0";
         var _this = this;
         this.innerCutoff = function () {
@@ -1158,44 +1398,42 @@ function loadData(data,flag_egift) {
             tmp_links = [];
             //console.log(data.inner);
             //console.log(data.links);
-            for(var i=0; i<data.inner.length; ++i)
-            {   /*console.log('innder node'+i);
-                console.log(data.inner[i].related_links);*/
-                 if(data.inner[i].related_links.length >= greatLength && data.inner[i].related_links.length<=smallLength)
-                 {
+            for (var i = 0; i < data.inner.length; ++i) {   /*console.log('innder node'+i);
+             console.log(data.inner[i].related_links);*/
+                if (data.inner[i].related_links.length >= greatLength && data.inner[i].related_links.length <= smallLength) {
                     cutoffObj.inner.push(data.inner[i]);    // all inner data is extracted
-                    for(var j=0; j<data.inner[i].related_links.length; ++j){
+                    for (var j = 0; j < data.inner[i].related_links.length; ++j) {
                         tmp_links.push(data.inner[i].related_links[j]); //get all related links id
                     }
-                    
-                    for (var k=0; k<data.inner[i].related_nodes.length; ++k){
-                        if(data.inner[i].related_nodes[k] != data.inner[i].id && tmp_outers.indexOf(data.inner[i].related_nodes[k])==-1){
+
+                    for (var k = 0; k < data.inner[i].related_nodes.length; ++k) {
+                        if (data.inner[i].related_nodes[k] != data.inner[i].id && tmp_outers.indexOf(data.inner[i].related_nodes[k]) == -1) {
                             tmp_outers.push(data.inner[i].related_nodes[k]); //get all related nodes id
                         }
                     }
-                    
-                 }
+
+                }
             }
-            
+
             // get all realted real cutoffObj.links and cutoffObj.outer
-            for (var i=0; i<data.links.length; ++i){
-                for (var j=0; j<tmp_links.length; ++j){
-                    if(data.links[i].id == tmp_links[j]){
+            for (var i = 0; i < data.links.length; ++i) {
+                for (var j = 0; j < tmp_links.length; ++j) {
+                    if (data.links[i].id == tmp_links[j]) {
                         cutoffObj.links.push(data.links[i]);
                     }
                 }
             }
-            
-            for (var i=0; i<data.outer.length; ++i){
+
+            for (var i = 0; i < data.outer.length; ++i) {
                 //here I don't remove some of related nodes from outer nodes
-                for (var j=0; j<tmp_outers.length; ++j){
-                    if(data.outer[i].id == tmp_outers[j]){
+                for (var j = 0; j < tmp_outers.length; ++j) {
+                    if (data.outer[i].id == tmp_outers[j]) {
                         cutoffObj.outer.push(data.outer[i]);
                     }
                 }
             }
-            
-            
+
+
             d3.select("#svgID").remove();
             $("#menuID").remove();
             $(".tooltip").remove();
@@ -1203,9 +1441,9 @@ function loadData(data,flag_egift) {
             window.gui_flag = true;
             window._data = data;
 
-            loadData(cutoffObj,flag_egift);
+            loadData(cutoffObj, flag_egift);
         };
-        this.outersmallerLength = "5";
+        this.outersmallerLength = "200";
         this.outergreaterLength = "0";
         this.outerCutoff = function () {
             var smallLength = parseInt(_this.outersmallerLength);
@@ -1218,47 +1456,45 @@ function loadData(data,flag_egift) {
             tmp_inners = [];
             tmp_links = [];
 
-            for(var i=0; i<data.outer.length; ++i)
-            {   /*console.log('innder node'+i);
-                console.log(data.inner[i].related_links);*/
-                 if(data.outer[i].related_links.length >= greatLength && data.outer[i].related_links.length<=smallLength)
-                 {
+            for (var i = 0; i < data.outer.length; ++i) {   /*console.log('innder node'+i);
+             console.log(data.inner[i].related_links);*/
+                if (data.outer[i].related_links.length >= greatLength && data.outer[i].related_links.length <= smallLength) {
 
-                        cutoffObj.outer.push(data.outer[i]);  
-                    
-                      // all inner data is extracted
-                    for(var j=0; j<data.outer[i].related_links.length; ++j){
+                    cutoffObj.outer.push(data.outer[i]);
+
+                    // all inner data is extracted
+                    for (var j = 0; j < data.outer[i].related_links.length; ++j) {
                         tmp_links.push(data.outer[i].related_links[j]); //get all related links id
                     }
-                    
-                    for (var k=0; k<data.outer[i].related_nodes.length; ++k){
-                        if(data.outer[i].related_nodes[k] != data.outer[i].id &&tmp_inners.indexOf(data.outer[i].related_nodes[k])==-1){
+
+                    for (var k = 0; k < data.outer[i].related_nodes.length; ++k) {
+                        if (data.outer[i].related_nodes[k] != data.outer[i].id && tmp_inners.indexOf(data.outer[i].related_nodes[k]) == -1) {
                             tmp_inners.push(data.outer[i].related_nodes[k]); //get all related nodes id
                         }
                     }
-                    
-                 }
+
+                }
             }
 
             // get all realted real cutoffObj.links and cutoffObj.outer
-            for (var i=0; i<data.links.length; ++i){
-                for (var j=0; j<tmp_links.length; ++j){
-                    if(data.links[i].id == tmp_links[j]){
+            for (var i = 0; i < data.links.length; ++i) {
+                for (var j = 0; j < tmp_links.length; ++j) {
+                    if (data.links[i].id == tmp_links[j]) {
                         cutoffObj.links.push(data.links[i]);
                     }
                 }
             }
-            
-            for (var i=0; i<data.inner.length; ++i){
+
+            for (var i = 0; i < data.inner.length; ++i) {
                 //here I don't remove some of related nodes from inner nodes
-                for (var j=0; j<tmp_inners.length; ++j){
-                    if(data.inner[i].id == tmp_inners[j]){
+                for (var j = 0; j < tmp_inners.length; ++j) {
+                    if (data.inner[i].id == tmp_inners[j]) {
                         cutoffObj.inner.push(data.inner[i]);
                     }
                 }
             }
 
-            
+
             d3.select("#svgID").remove();
             $("#menuID").remove();
             $(".tooltip").remove();
@@ -1266,7 +1502,7 @@ function loadData(data,flag_egift) {
             window.gui_flag = true;
             window._data = data;
 
-            loadData(cutoffObj,flag_egift);
+            loadData(cutoffObj, flag_egift);
         };
         this.sortOuterData = SORTOUTERFLAG;
         this.sortInnerData = SORTINNERFLAG;
@@ -1278,7 +1514,7 @@ function loadData(data,flag_egift) {
                 }
                 d3.select("#svgID").remove();   //=================================================================================================================================
                 $(".main").remove();  //remove the old gui
-                loadData(window._data,flag_egift);
+                loadData(window._data, flag_egift);
                 subsetObj = {};
                 subsetObj.inner = [];
                 subsetObj.outer = [];
@@ -1307,46 +1543,56 @@ function loadData(data,flag_egift) {
             $(".ac").appendTo($("body"));
         }
         $(".main").remove();  //remove the old gui
-    } //=================================================================================================================================
+    }
+    //===============================================GUI=====================================================================
 
     var gui = new dat.GUI({ width: 360 });
     gui.add(text, 'switchNode').name('Switch');
-    
-    if(flag_egift){
+    var searchNode = gui.addFolder('Search Node');
+    searchNode.add(text, 'inputSearchName').name('Input Name');
+    searchNode.add(text, 'searchNode').name('Search');
+    if (flag_egift) {
         var legend = gui.addFolder('Legend');
         legend.add(text, 'innerLegend').name('Show Inner Legend');
         legend.add(text, 'outerLegend').name('Show Outer Legend');
     }
-    
+    if (!CUSTOMEDATA) {
         var loadFile = gui.addFolder('Load Expression File');
-    var upExpressedControl = loadFile.add(text, 'upExpressed').name('Name Up Gene');
-    upExpressedControl.onChange(function(value) {
-        UpExpressed=value;
-    });
-    var downExpressedControl = loadFile.add(text, 'downExpressed').name('Name Down Gene');
-    downExpressedControl.onChange(function(value) {
-        DownExpressed=value;
-    });
-    loadFile.add(text, 'loadFile').name('Choose Data File');
-    loadFile.add(text,'colorNodeSample').name('Sample Data')
-    loadFile.add(text, 'load').name('Load');
-    var sortOuterControl = gui.add(text, 'sortOuterData', [ 'OuterLength', 'OuterFrequency', 'OuterRateLimited' ] ).name('sortOuterData').listen();
-    var sortInnerControl = gui.add(text, 'sortInnerData', [ 'Default','InnerLength', 'InnerFrequency', 'InnerRateLimited' ] ).name('sortInnerData').listen();
-    sortOuterControl.onChange(function(value) {
-        SORTOUTERFLAG=value;
+        var upExpressedControl = loadFile.add(text, 'upExpressed').name('Name Up Gene');
+        upExpressedControl.onChange(function (value) {
+            UpExpressed = value;
+        });
+        var downExpressedControl = loadFile.add(text, 'downExpressed').name('Name Down Gene');
+        downExpressedControl.onChange(function (value) {
+            DownExpressed = value;
+        });
+        loadFile.add(text, 'loadFile').name('Choose Data File');
+        loadFile.add(text, 'colorNodeSample').name('Sample Data')
+        loadFile.add(text, 'load').name('Load');
+    }
+    else {
+        var loadColorFile = gui.addFolder('Load Color File');
+        loadColorFile.add(text, 'chooseColorFile').name('Choose Data File');
+        loadColorFile.add(text, 'colorFileSample').name('Sample Data')
+        loadColorFile.add(text, 'loadColor').name('Load');
+    }
+    var sortOuterControl = gui.add(text, 'sortOuterData', [ 'OuterLength', 'OuterFrequency', 'OuterRateLimited' ]).name('sortOuterData').listen();
+    var sortInnerControl = gui.add(text, 'sortInnerData', [ 'Default', 'InnerLength', 'InnerFrequency', 'InnerRateLimited' ]).name('sortInnerData').listen();
+    sortOuterControl.onChange(function (value) {
+        SORTOUTERFLAG = value;
         d3.select("#svgID").remove();   //=================================================================================================================================
         $("#menuID").remove();
         $(".tooltip").remove();
         $(".main").remove();
-        loadData(data,flag_egift);
+        loadData(data, flag_egift);
     });
-    sortInnerControl.onChange(function(value) {
-        SORTINNERFLAG=value;
+    sortInnerControl.onChange(function (value) {
+        SORTINNERFLAG = value;
         d3.select("#svgID").remove();   //=================================================================================================================================
         $("#menuID").remove();
         $(".tooltip").remove();
         $(".main").remove();
-        loadData(data,flag_egift);
+        loadData(data, flag_egift);
     });
     var Save = gui.addFolder('Save');
     Save.add(text, 'saveData').name('Save Data');
@@ -1360,14 +1606,14 @@ function loadData(data,flag_egift) {
 
     var cutoffLength = gui.addFolder('Filter');
     var innercutoffLength = cutoffLength.addFolder('Inner Data Filter');
-    innercutoffLength.add(text, 'innersmallerLength').name("Edge number <");
-    innercutoffLength.add(text, 'innergreaterLength').name("Edge number >");
-    innercutoffLength.add(text, 'innerCutoff').name('GO');
+    innercutoffLength.add(text, 'innersmallerLength').name("Edge number <="); ////////////?????????????????????????????????????????????????????????????????????????change
+    innercutoffLength.add(text, 'innergreaterLength').name("Edge number >=");////////////?????????????????????????????????????????????????????????????????????????change
+    innercutoffLength.add(text, 'innerCutoff').name('Select');
 
     var outercutoffLength = cutoffLength.addFolder('Outer Data Filter');
-    outercutoffLength.add(text, 'outersmallerLength').name("Edge number <");
-    outercutoffLength.add(text, 'outergreaterLength').name("Edge number >");
-    outercutoffLength.add(text, 'outerCutoff').name('GO');
+    outercutoffLength.add(text, 'outersmallerLength').name("Edge number <=");////////////?????????????????????????????????????????????????????????????????????????change
+    outercutoffLength.add(text, 'outergreaterLength').name("Edge number >=");////////////?????????????????????????????????????????????????????????????????????????change
+    outercutoffLength.add(text, 'outerCutoff').name('Select');
 //remove highlighted nodes and edges
 //document.body.addEventListener("click", function() {
     $("#svgID")[0].addEventListener("click", function () {
@@ -1532,12 +1778,38 @@ function loadData(data,flag_egift) {
             });
             d.clickFlag = !d.clickFlag;
             if (d.id.indexOf('i') > -1) {
-                subsetObj.inner.push(d);  //here we need to remove the node.x  and node.y
+                ////////////?????????????????????????????????????????????????????????????????????????change////////////?????????????????????????????????????????????????????????????????????????change
+                //console.log('selectedObj');
+                //console.log(selectedObj);
+                //console.log(selectedObj.related_nodes.length);
+                var existInInner = false;
+                //here we use subsetObj to check whether inner node was selected already (different from the checking method when we need to push outer or inner node to subsetObj)
+                for (var i = 0; i < subsetObj.inner.length; i++) {
+                    if (subsetObj.inner[i].id == d.id) {
+                        existInInner = true;
+                    }
+                }
+
+                if (!existInInner) {
+                    subsetObj.inner.push(d);
+                }
+
                 flag_node_type = 1;
+                // if it's not in subset 
             }
             else {
-                subsetObj.outer.push(d);
+                var existInOuter = false;
+                for (var i = 0; i < subsetObj.outer.length; i++) {
+                    if (subsetObj.outer[i].id == d.id) {
+                        existInOuter = true;
+                    }
+                }
+                if (!existInOuter) {
+                    subsetObj.outer.push(d);
+                }
+
                 flag_node_type = 0;
+                ////////////?????????????????????????????????????????????????????????????????????????change////////////?????????????????????????????????????????????????????????????????????????change
             }
 
             if (flag_node_type) {// inner node clicked, related nodes are outer nodes
@@ -1636,12 +1908,12 @@ function loadData(data,flag_egift) {
         else {
             var name = d.name;
             var menu_pop = '<div style="top:0;"> Title: ' + name + '</div>';
-            if(flag_egift){
-                menu_pop= menu_pop +'<div style="margin-top:3px">Link To : <a href="http://www.ncbi.nlm.nih.gov/gquery/?term=' + name + '" target = "_blank"><button>NCBI</button></a></div>';
-               
+            if (flag_egift) {
+                menu_pop = menu_pop + '<div style="margin-top:3px">Link To : <a href="http://www.ncbi.nlm.nih.gov/gquery/?term=' + name + '" target = "_blank"><button>NCBI</button></a></div>';
+
             }
-            
-                menu_pop= menu_pop + '<div style="margin-top:5px">Node : <button id=' + d.id + '_rm>Remove</button></div>'
+
+            menu_pop = menu_pop + '<div style="margin-top:5px">Node : <button id=' + d.id + '_rm>Remove</button></div>'
                 + '<div style="margin-top:5px">Label Size: <input type="text" id=' + d.id + '_ls size="2"><lable> characters </lable><button id=' + d.id + '_rz>Resize</button></div>';
 
         }
@@ -1686,7 +1958,7 @@ function loadData(data,flag_egift) {
         d3.select("#svgID").remove();  //remove svg     //=================================================================================================================================
         //$("#menuID").remove();  //remove div menu
         $(".main").remove();  //remove the old gui
-        loadData(data,flag_egift);
+        loadData(data, flag_egift);
         //tooltip.remove();
     }
 

@@ -33,7 +33,8 @@ my @black;
   while(<FASTA>) {
     next if($.==1);
     my ($iterm,$score,$cat,$count,$genes)=map {s/^"(.*)"$/$1/; $_;} split /,/;
- 
+    #$list = str_replace('"','-',$list);  $text =~ tr/a/z/;
+    $iterm =~ tr/"/-/;
     if ($iterm ~~ @black){
       while(/(\S+) \(\d*\)/g) {
        my $name=$1;

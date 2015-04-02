@@ -2,7 +2,7 @@
 require_once('display_fns.php');
 display_header();
 echo "<div id='container'>";
-echo "<p><b>Contact</b></p>";
+echo '<p><img src="images/newsgoldbullet.gif" border="0"style="margin-left: 0px"><b>Contact</b></p>';
 echo "<p> If you have questions or comments about our application that we provide, we would be pleased to hear from you!</p>";
 echo "<form action='contact.php' method='POST'>";
 echo "<span>Name</span></br>";

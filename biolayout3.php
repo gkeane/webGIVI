@@ -399,7 +399,7 @@
   <li><a id='legend'>Diagram</a></li>
   <li><a href="#">Layout</a></li>
   <li><a href="#">Tool</a></li>
-  <li><a href="http://raven.anr.udel.edu/~sunliang/biolayout2/contact.php" target="_blank">Contact</a></li>
+  <li><a href="contact.php" target="_blank">Contact</a></li>
   </ul>
   
   <div id="dialog" title="Graph Legend">
